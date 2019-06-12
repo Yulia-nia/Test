@@ -1,0 +1,4 @@
+Limousine Audi-6;2000;2018;6,0;90;7;true;13;false
+Limousine Mersedess;1000;2018;4,0;40;9;false;7;true
+Limousine Volvo;2500;2018;5,0;120;5;true;11;false
+Limousine Mers;200;2018;6,5;30;10;true;10;true

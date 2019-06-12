@@ -1,0 +1,4 @@
+Car Audi;2000;2018;6,0;180;5;true;false
+Car BMW;1000;2018;4,0;280;7;false;true
+Car Volvo;2500;2018;5,0;100;2;true;false
+Car Mers;200;2018;6,5;50;5;true;true

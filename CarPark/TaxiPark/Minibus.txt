@@ -1,0 +1,4 @@
+Minibus Golf;2000;2012;10,0;110;12;true;true
+Minibus Reno;1000;2018;1,0;220;8;false;false
+Minibus Iveko;2500;2014;8,0;130;10;true;false
+Minibus Mers;200;2018;6,2;50;150;true;false

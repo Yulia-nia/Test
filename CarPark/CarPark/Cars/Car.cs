@@ -7,22 +7,36 @@ using System.Collections;
 
 namespace CarPark.Cars
 {
-    public class Car
+    public  class Car : IDrivingObject
     {
         public string Model { get; set; }
-        public int Price { get; set; }
+        public long Price { get; set; }
         public int Year { get; set; }
-        public double Fuel { get; set; }
-        public int MaxSpeed { get; set; }
+        public double FuelConsumption { get; set; }  
+        public int AverageSpeed { get; set; } 
+        public int NumberOfPassengerSeats { get; set; }
+        public bool  IsChildSeat { get; set; }
 
-        public Car(string model, int price, int year, double fuel, int spead)
+        public Car(string str)
         {
-            Model = model;
-            Price = price;
-            Year = year;
-            Fuel = fuel;
-            MaxSpeed = spead;
-        }    
+            string[] parts = str.Split(";");
+            Model = parts[0];
+            Price = long.Parse(parts[1]);
+            Year = int.Parse(parts[2]);
+            FuelConsumption = (int)double.Parse(parts[3]);
+            AverageSpeed = int.Parse(parts[4]);
+            NumberOfPassengerSeats = int.Parse(parts[5]);
+            IsChildSeat = bool.Parse(parts[6]);
+        }
 
+        public Car()
+        {
+        }
+
+        public virtual void Driving(double costOfKilometer, double firstCost, double distance)
+        {
+            double res = costOfKilometer + (firstCost * distance);
+            Console.WriteLine("Your cost is: " + res);
+        }
     }
 }
