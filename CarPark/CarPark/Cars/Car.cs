@@ -19,11 +19,11 @@ namespace CarPark.Cars
 
         public Car(string str)
         {
-            string[] parts = str.Split(";");
+            string[] parts = str.Split("; ");
             Model = parts[0];
             Price = long.Parse(parts[1]);
             Year = int.Parse(parts[2]);
-            FuelConsumption = (int)double.Parse(parts[3]);
+            FuelConsumption = double.Parse(parts[3]);
             AverageSpeed = int.Parse(parts[4]);
             NumberOfPassengerSeats = int.Parse(parts[5]);
             IsChildSeat = bool.Parse(parts[6]);

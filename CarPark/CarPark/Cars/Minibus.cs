@@ -10,7 +10,7 @@ namespace CarPark.Cars
                 
         public Minibus(string str): base(str)
         {
-            string[] parts = str.Split(";");
+            string[] parts = str.Split("; ");
             IsTripsToAnotherCity = bool.Parse(parts[7]);
         }
 

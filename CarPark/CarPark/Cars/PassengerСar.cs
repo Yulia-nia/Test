@@ -10,7 +10,7 @@ namespace CarPark.Cars
         
         public PassengerСar(string str): base(str)
         {
-            string[] parts = str.Split(";");
+            string[] parts = str.Split("; ");
             IsSoberDriverService = bool.Parse(parts[7]);
         }
 

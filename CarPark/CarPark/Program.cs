@@ -17,24 +17,36 @@ namespace CarPark
                 "\n2.Sorting car fleet by fuel consumption" +
                 "\n3.Find a car by speed" +
                 "\n4.Would you like calculate the coast of your taxi" +
-                "\n5.Exite");
-            int number = Int32.Parse(Console.ReadLine());
-            switch(number)
-            {
-                case 1:
-                    park.PrintSumOfCars();
-                    break;
-                case 2:
-                    park.PrintCarsByRange();
-                    break;
-                case 3:
-                    park.PrintCarBySpeed();
-                    break;
-                case 4:
-                    park.PrintYourCostOfTaxi();
-                    break;
-                default: return;
-            }
+                "\n5.Show all cars" +
+                "\n6.Delete car" +
+                "\n7.Add new car" +
+                "\n8.Exite");
+             int number = Int32.Parse(Console.ReadLine());
+             switch (number)
+                {
+                    case 1:
+                        park.PrintSumOfCars();
+                        break;
+                    case 2:
+                        park.PrintCarsByRange();
+                        break;
+                    case 3:
+                        park.PrintCarBySpeed();
+                        break;
+                    case 4:
+                        park.PrintYourCostOfTaxi();
+                        break;
+                    case 5:
+                        park.PrintAllCars();
+                        break;
+                    case 6:
+                        park.DeleteCar();
+                        break;
+                    case 7:
+                        park.AddNewCar();
+                        break;
+                    default: return;
+             }
             Console.ReadLine();
         }
     }

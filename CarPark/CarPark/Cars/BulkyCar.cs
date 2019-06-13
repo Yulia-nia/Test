@@ -12,7 +12,7 @@ namespace CarPark.Cars
         public BulkyCar(string str)
             : base(str)
         {
-            string[] parts = str.Split(";");
+            string[] parts = str.Split("; ");
             LoadCapasity = (int)double.Parse(parts[7]);
         }
 

@@ -61,6 +61,100 @@ namespace CarPark
             AddPassengerСarFromFile();
         }
 
+        public void DeleteCar()
+        {  
+            Console.WriteLine("Choose one car:\n  1)Bulky Car\n  " +
+                "2)Limousine\n  3)Minibus\n  4)Passenger Car");
+            int num = Int32.Parse(Console.ReadLine());
+            Console.WriteLine("Input the Model of Car");
+            var str = Console.ReadLine();            
+            switch (num)
+            {
+                case 1:
+                    var path = @"C:\Users\user\source\repos\CarPark\TaxiPark\BulkyCars.txt";
+                    DeleteCarInFile(path, str);
+                    break;
+                case 2:
+                    var path1 = @"C:\Users\user\source\repos\CarPark\TaxiPark\Limousines.txt";
+                    DeleteCarInFile(path1, str);
+                    break;
+                case 3:
+                    var path2 = @"C:\Users\user\source\repos\CarPark\TaxiPark\Minibus.txt";
+                    DeleteCarInFile(path2, str);
+                    break;
+                case 4:
+                    string path3 = @"C:\Users\user\source\repos\CarPark\TaxiPark\PassengerCars.txt";
+                    DeleteCarInFile(path3, str);
+                    break;
+            }
+            Console.WriteLine("Your car is delete");
+        }
+        public void DeleteCarInFile(string path, string str)
+        {
+            List<string> file = File.ReadAllLines(path).ToList();
+            var deleteCar = file.FirstOrDefault(i => i.StartsWith(str));
+            var index = file.IndexOf(deleteCar);
+            file.RemoveAt(index);
+            File.WriteAllLines(path, file.ToArray());
+        }
+       
+
+        public void AddNewCar()
+        {          
+            Console.WriteLine("Choose one car:\n  1)Bulky Car\n  " +
+                "2)Limousine\n  3)Minibus\n  4)Passenger Car");
+            int num = Int32.Parse(Console.ReadLine());
+            switch(num)
+            {
+                case 1:
+                    var path = @"C:\Users\user\source\repos\CarPark\TaxiPark\BulkyCars.txt";
+                    Console.WriteLine("Input the Model of Car; Price; Year; Fuel Consumption; Average Speed; Number Of Passenger Seats; Is Child Seat; LoadCapasity");
+                    string str = Console.ReadLine();                    
+                    _taxiPark.Add(new BulkyCar(str));
+                    AddCarInFile(path, str);
+                    break;
+                case 2:
+                    var path1 = @"C:\Users\user\source\repos\CarPark\TaxiPark\Limousines.txt";
+                    Console.WriteLine("Input the Model of Car; Price; Year; Fuel Consumption; Average Speed; Number Of Passenger Seats; Is Child Seat; Car Length; IsCarForParty");
+                    string str1 = Console.ReadLine();                    
+                    _taxiPark.Add(new Limousine(str1));                    
+                    AddCarInFile(path1, str1);
+                    
+                    break;
+                case 3:
+                    var path2 = @"C:\Users\user\source\repos\CarPark\TaxiPark\Minibus.txt";
+                    Console.WriteLine("Input the Model of Car; Price; Year; Fuel Consumption; Average Speed; Number Of Passenger Seats; Is Child Seat; Is Trips To Another City");
+                    string str2 = Console.ReadLine();
+                    _taxiPark.Add(new Minibus(str2));
+                    AddCarInFile(path2, str2);
+                    break;
+                case 4:
+                    var path3 = @"C:\Users\user\source\repos\CarPark\TaxiPark\PassengerCars.txt";
+                    Console.WriteLine("Input the Model of Car; Price; Year; Fuel Consumption; Average Speed; Number Of Passenger Seats; Is Child Seat; IsSoberDriverService");
+                    string str3 = Console.ReadLine();
+                    _taxiPark.Add(new PassengerСar(str3));
+                    AddCarInFile(path3, str3);
+                    break;
+            }
+            Console.WriteLine("Your car is add");
+        }
+
+        public void AddCarInFile(string path, string str)
+        {
+            using (StreamWriter write = new StreamWriter(path, true, Encoding.Default))
+            {
+                write.WriteLine(str);
+                write.Close();
+            }
+        }
+
+
+        public void PrintAllCars()
+        {
+            IEnumerable<IDrivingObject> ShowAllCars = _taxiPark.Where(i => i is Car);
+            PrintSomeCars(ShowAllCars);
+        }
+
         #region IList
         public IDrivingObject this[int index] { get => _taxiPark[index]; set => _taxiPark[index] = value; }
 

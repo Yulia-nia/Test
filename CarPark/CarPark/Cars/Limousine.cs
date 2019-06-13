@@ -11,7 +11,7 @@ namespace CarPark.Cars
 
         public Limousine(string str): base(str)
         {
-            string[] parts = str.Split(";");
+            string[] parts = str.Split("; ");
             CarLength = (int)double.Parse(parts[7]);
             IsCarForParty = bool.Parse(parts[8]);
         }
