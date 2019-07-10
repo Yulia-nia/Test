@@ -6,38 +6,31 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace WorkWithFiles
 {
     class TextHandler
     {
         public string Path { get; set; }
-        public async Task<Sentence[]> ParseText()
+
+        public async Task<List<string>> ParseText()
         {
             Parser parser = new Parser();
             return await parser.GetSentences(Path);
         }
-        public async Task<List<string>> PathStringText()
-        {
-            Parser parser = new Parser();
-            return await parser.GetSentencesString(Path);
-        }
 
-        private async Task<Dictionary<string, int>> GetAlfaDictionary()
+        public async Task<Dictionary<string, int>> GetAlfaDictionary()
         {
             var sent = await ParseText();
-            var worlds = sent.Select(s => s.Where(part => part is World)).SelectMany(s => s);
-            var dictionary = new Dictionary<string, int>();
+            World world = new World();
+            List<string> worlds = await world.GetWorlds(sent);
+
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();
             foreach (var item in worlds)
             {
-                if (dictionary.ContainsKey(item.Value))
-                {
-                    dictionary[item.Value]++;
-                }
-                else
-                {
-                    dictionary.Add(item.Value, 1);
-                }
+                if (dictionary.ContainsKey(item)) dictionary[item]++;
+                else dictionary.Add(item, 1);
             }
             return dictionary;
         }
@@ -46,15 +39,15 @@ namespace WorkWithFiles
         {
             var dictionary = new Dictionary<char, int>();
             var sent = await ParseText();
-            var worlds = sent.Select(s => s.Where(p => p is World)).SelectMany(s => s);
-            foreach (var world in worlds)
-            {
-                //string ss = w.ToString();
-                char[] symbols = (world.Value.ToString()).ToCharArray();
-                foreach (var item in symbols)
+            World world = new World();
+            List<string> worlds = await world.GetWorlds(sent);
+            foreach (var item in worlds)
+            {               
+                char[] symbols = (item.ToString()).ToCharArray();
+                foreach (var symbol in symbols)
                 {
-                    if (dictionary.ContainsKey(item)) dictionary[item]++;
-                    else dictionary.Add(item, 1);
+                    if (dictionary.ContainsKey(symbol)) dictionary[symbol]++;
+                    else dictionary.Add(symbol, 1);
                 }
             }
             return dictionary;
@@ -62,14 +55,14 @@ namespace WorkWithFiles
 
         public async Task<string> GetShortSentence()
         {
-            var sent = await PathStringText();
+            var sent = await ParseText();
             Dictionary<string, int> sentences = new Dictionary<string, int>();
             foreach (string item in sent)
             {
                 Regex r = new Regex(@"[^0-9A-Za-z]+");
                 var newstr = r.Replace(item, " ");
                 var worlds = newstr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (sentences.ContainsKey(item) || item.Length <= 1) sentences.Remove(item);
+                if ((sentences.ContainsKey(item)) || (worlds.Count() <= 1)) sentences.Remove(item);
                 else sentences.Add(item, worlds.Count());
             }
             int min = sentences.Values.Min();
@@ -83,17 +76,43 @@ namespace WorkWithFiles
             }
             return listOfresult.First();
         }
+        public async Task<List<string>> RemoveUnusedSymbols()
+        {
+            var sentence = await ParseText();
+            var symbolsCollection = new[] { "(", ")", "[", "]", "}", "{", "<", ">", "\\", "--", "+", "*", "=", "\n", "|" };
+            List<string> text = new List<string>();
+            foreach (var sent in sentence)
+            {
+                foreach (var item in symbolsCollection)
+                {
+                    sent.Replace(item, "");
+                }
+                text.Add(sent);
+            }
+            return text;
+        }
 
         public async Task<string> GetLongSentence()
         {
-            var sent = await PathStringText();
-            var dictionary = new Dictionary<string, int>();
+            var sent = await RemoveUnusedSymbols();  
+            var dictionary = new Dictionary<string, int>();            
+            int count;            
             foreach (var item in sent)
-            {
-                var symbol = (sent.ToString()).ToCharArray();
-                var count = symbol.Where(char.IsSymbol).Count();
-                if (dictionary.ContainsKey(item)) dictionary.Remove(item);
-                else dictionary.Add(item, count);
+            {                
+                if (dictionary.ContainsKey(item))
+                {
+                    dictionary.Remove(item);
+                }
+                else
+                {
+                    var charMass = item.ToCharArray();
+                    count = 0;
+                    foreach (var symbol in charMass)
+                    {
+                        if (char.IsSymbol(symbol)) count++;
+                    }
+                    dictionary.Add(item, count);
+                }
             }
             int max = dictionary.Values.Max();
             var listOfresult = new List<string>();
@@ -117,7 +136,6 @@ namespace WorkWithFiles
                 int max = dict.Values.Max();
                 foreach (char element in dict.Keys)
                 {
-
                     if (dict[element] == max)
                     {
                         await sw1.WriteLineAsync($"The most common letter is: {element} - {dict[element]} times.");
@@ -127,7 +145,7 @@ namespace WorkWithFiles
                 await sw1.WriteLineAsync($"The shortest sentence by word count: {shortSentence}");
 
                 var longentence = await GetLongSentence();
-                await sw1.WriteLineAsync($"The longertest sentence by word count: {longentence}");
+                await sw1.WriteLineAsync($"The longest sentence by character count: {longentence}");
             }
         }
         public async Task Creat()
